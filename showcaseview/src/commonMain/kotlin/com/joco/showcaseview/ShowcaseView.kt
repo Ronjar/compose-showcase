@@ -37,7 +37,6 @@ import kotlin.math.roundToInt
  * @param alignment the alignment of the dialog relative to the target element.
  * @param animationDuration the duration of the fade in and fade out animation.
  * @param onDisplayStateChanged: callback function that is invoked when the display state of the Showcase changes.
- * @param overlayModifier modifier applied specifically to the backdrop overlay.
  * @param highlight the highlight around the target element.
  * @param backgroundAlpha the alpha value of the background overlay.
  * @param dialog the content of the dialog.
@@ -46,7 +45,6 @@ import kotlin.math.roundToInt
 fun ShowcaseView(
     visible: Boolean,
     targetCoordinates: LayoutCoordinates,
-    overlayModifier: Modifier = Modifier,
     position: ShowcasePosition = ShowcasePosition.Default,
     alignment: ShowcaseAlignment = ShowcaseAlignment.Default,
     animationDuration: AnimationDuration = AnimationDuration.Default,
@@ -72,8 +70,7 @@ fun ShowcaseView(
         Box {
             ShowcaseBackground(
                 highlightProperties = highlightDrawer,
-                backgroundAlpha = backgroundAlpha,
-                modifier = overlayModifier
+                backgroundAlpha = backgroundAlpha
             )
             ShowcaseDialog(
                 targetRect = targetCoordinates.boundsInRoot(),
@@ -103,18 +100,15 @@ fun ShowcaseView(
  *
  * @param highlightProperties the properties of the highlight containing cutout geometry.
  * @param backgroundAlpha the alpha value of the background overlay.
- * @param modifier modifier applied to the overlay surface.
  */
 @Composable
 private fun ShowcaseBackground(
     highlightProperties: HighlightProperties,
-    backgroundAlpha: BackgroundAlpha,
-    modifier: Modifier = Modifier
+    backgroundAlpha: BackgroundAlpha
 ) {
     Spacer(
         modifier = Modifier
             .fillMaxSize()
-            .then(modifier)
             .drawWithCache {
                 val path = Path().apply {
                     fillType = PathFillType.EvenOdd

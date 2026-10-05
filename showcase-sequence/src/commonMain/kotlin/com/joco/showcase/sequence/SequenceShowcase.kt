@@ -25,20 +25,9 @@ val LocalSequenceShowcaseState = staticCompositionLocalOf<SequenceShowcaseState?
 @Composable
 fun SequenceShowcase(
     state: SequenceShowcaseState = rememberSequenceShowcaseState(),
-    overlayModifier: Modifier = Modifier,
-    defaultHighlight: ShowcaseHighlight = ShowcaseHighlight.Rectangular(),
-    defaultDuration: AnimationDuration = AnimationDuration.Default,
-    defaultBackgroundAlpha: BackgroundAlpha = BackgroundAlpha.Normal,
     content: @Composable SequenceShowcaseScope.() -> Unit
 ) {
-    val scope = remember(state, defaultHighlight, defaultDuration, defaultBackgroundAlpha) {
-        SequenceShowcaseScope(
-            state = state,
-            defaultHighlight = defaultHighlight,
-            defaultDuration = defaultDuration,
-            defaultBackgroundAlpha = defaultBackgroundAlpha
-        )
-    }
+    val scope = remember(state) { SequenceShowcaseScope(state) }
 
     CompositionLocalProvider(LocalSequenceShowcaseState provides state) {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -49,7 +38,6 @@ fun SequenceShowcase(
                     ShowcaseView(
                         visible = state.showCaseVisible,
                         targetCoordinates = target.coordinates,
-                        overlayModifier = overlayModifier,
                         position = target.position,
                         alignment = target.alignment,
                         highlight = target.highlight,
@@ -79,9 +67,6 @@ fun SequenceShowcase(
  */
 class SequenceShowcaseScope(
     private val state: SequenceShowcaseState,
-    internal val defaultHighlight: ShowcaseHighlight = ShowcaseHighlight.Rectangular(),
-    internal val defaultDuration: AnimationDuration = AnimationDuration.Default,
-    internal val defaultBackgroundAlpha: BackgroundAlpha = BackgroundAlpha.Normal,
 ) {
     /**
      * Creates a Modifier that marks a Composable as a target for the SequenceShowcase.
@@ -89,18 +74,18 @@ class SequenceShowcaseScope(
      * @param index The index of the target in the sequence.
      * @param position The position of the dialog relative to the target element.
      * @param alignment The alignment of the dialog relative to the target element.
-     * @param highlight The highlight around the target element. Defaults to [defaultHighlight].
-     * @param animationDuration The duration of the fade enter and exit animation. Defaults to [defaultDuration].
-     * @param backgroundAlpha The alpha value of the background overlay. Defaults to [defaultBackgroundAlpha].
+     * @param highlight The highlight around the target element.
+     * @param animationDuration The duration of the fade enter and exit animation.
+     * @param backgroundAlpha The alpha value of the background overlay.
      * @param content The content of the dialog.
      */
     fun Modifier.sequenceShowcaseTarget(
         index: Int,
         position: ShowcasePosition = ShowcasePosition.Default,
         alignment: ShowcaseAlignment = ShowcaseAlignment.Default,
-        highlight: ShowcaseHighlight = defaultHighlight,
-        animationDuration: AnimationDuration = defaultDuration,
-        backgroundAlpha: BackgroundAlpha = defaultBackgroundAlpha,
+        highlight: ShowcaseHighlight = ShowcaseHighlight.Rectangular(),
+        animationDuration: AnimationDuration = AnimationDuration.Default,
+        backgroundAlpha: BackgroundAlpha = BackgroundAlpha.Normal,
         content: @Composable (Rect) -> Unit,
     ): Modifier = onGloballyPositioned { coordinates ->
         if (coordinates.isAttached && coordinates.size.width > 0 && coordinates.size.height > 0) {
