@@ -53,9 +53,9 @@ fun ShowcaseView(
     backgroundAlpha: BackgroundAlpha = BackgroundAlpha.Normal,
     dialog: @Composable (Rect) -> Unit
 ) {
-    // Prevent crash and ghost renders if coordinates are not attached or not yet measured
-    if (!targetCoordinates.isAttached || targetCoordinates.size.width <= 0 || targetCoordinates.size.height <= 0) {
-        println("ShowcaseView: Target coordinates are not attached or not measured, skipping showcase")
+    // Prevent crash if coordinates are not attached
+    if (!targetCoordinates.isAttached) {
+        println("ShowcaseView: Target coordinates are not attached, skipping showcase")
         return
     }
 
@@ -196,9 +196,4 @@ private fun ShowcaseDialog(
     ) {
         content(highlightBounds)
     }
-}
-
-@Composable
-fun Float.toDp() = with(LocalDensity.current) {
-    toDp()
 }

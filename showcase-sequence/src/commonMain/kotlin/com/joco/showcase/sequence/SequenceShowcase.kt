@@ -34,28 +34,26 @@ fun SequenceShowcase(
             scope.content()
 
             state.currentTarget?.let { target ->
-                if (target.coordinates.isAttached && target.coordinates.size.width > 0 && target.coordinates.size.height > 0) {
-                    ShowcaseView(
-                        visible = state.showCaseVisible,
-                        targetCoordinates = target.coordinates,
-                        position = target.position,
-                        alignment = target.alignment,
-                        highlight = target.highlight,
-                        animationDuration = target.duration,
-                        backgroundAlpha = target.backgroundAlpha,
-                        onDisplayStateChanged = { displayState ->
-                            when(displayState) {
-                                ShowcaseDisplayState.Appeared -> {
-                                    state.onShowcaseViewAppear()
-                                }
-                                ShowcaseDisplayState.Disappeared -> {
-                                    state.onShowcaseViewDisappear()
-                                }
+                ShowcaseView(
+                    visible = state.showCaseVisible,
+                    targetCoordinates = target.coordinates,
+                    position = target.position,
+                    alignment = target.alignment,
+                    highlight = target.highlight,
+                    animationDuration = target.duration,
+                    backgroundAlpha = target.backgroundAlpha,
+                    onDisplayStateChanged = { displayState ->
+                        when(displayState) {
+                            ShowcaseDisplayState.Appeared -> {
+                                state.onShowcaseViewAppear()
+                            }
+                            ShowcaseDisplayState.Disappeared -> {
+                                state.onShowcaseViewDisappear()
                             }
                         }
-                    ) { targetRect ->
-                        target.content(targetRect)
                     }
+                ) { targetRect ->
+                    target.content(targetRect)
                 }
             }
         }
@@ -88,17 +86,15 @@ class SequenceShowcaseScope(
         backgroundAlpha: BackgroundAlpha = BackgroundAlpha.Normal,
         content: @Composable (Rect) -> Unit,
     ): Modifier = onGloballyPositioned { coordinates ->
-        if (coordinates.isAttached && coordinates.size.width > 0 && coordinates.size.height > 0) {
-            state.targets[index] = SequenceShowcaseTarget(
-                index = index,
-                coordinates = coordinates,
-                position = position,
-                alignment = alignment,
-                highlight = highlight,
-                duration = animationDuration,
-                backgroundAlpha = backgroundAlpha,
-                content = content
-            )
-        }
+        state.targets[index] = SequenceShowcaseTarget(
+            index = index,
+            coordinates = coordinates,
+            position = position,
+            alignment = alignment,
+            highlight = highlight,
+            duration = animationDuration,
+            backgroundAlpha = backgroundAlpha,
+            content = content
+        )
     }
 }
